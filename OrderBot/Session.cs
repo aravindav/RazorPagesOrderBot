@@ -6,12 +6,15 @@ namespace OrderBot
     {
         private enum State
         {
-            WELCOMING, MEAT_TYPE, MEAT_SIZE, QUANTITY, PHONE, NAME, THANKYOU, PAYMENT, CVV, ORDERCONFIRM
+            WELCOMING, MEAT_TYPE, MEAT_SIZE, QUANTITY, PHONE, NAME, CARDCONFIRM, THANKYOU, PAYMENT, CVV, ORDERCONFIRM
         }
 
         private State nCur = State.WELCOMING;
         private Order oOrder;
         public string Name {get; set;}
+
+        public string CardDetails {get; set;}
+        public string CVV {get; set;}
 
         public Session(string sPhone)
         {
@@ -54,22 +57,35 @@ namespace OrderBot
                     break;
                 
                 case State.THANKYOU:
-                    aMessages.Add("Please confirm the order items and type \"pay\":");
+                    this.oOrder.Phone = sInMessage;
+
+                    aMessages.Add("Please confirm the order items:");
                     aMessages.Add($"1. Meat Type : {this.oOrder.MeatType} ");
                     aMessages.Add($"2. Size : {this.oOrder.Size}");
                     aMessages.Add($"2. Quantity : {this.oOrder.Quantity}");
                     aMessages.Add("\nYour Personal Details\n");
                     aMessages.Add($"Name : {this.oOrder.Name}\n");
                     aMessages.Add($"Phone Number : {this.oOrder.Phone}\n");
+                    aMessages.Add("Please type \"pay\": to procced further");
 
                     this.nCur = State.PAYMENT;
                     break;
                 case State.PAYMENT:
-                    aMessages.Add("Please enter the credit card details:");
+                    aMessages.Add("Please enter the credit card number:");
                     this.nCur = State.CVV;
                     break;
                 case State.CVV:
+                    this.CardDetails = sInMessage;
                     aMessages.Add("Please enter the credit card cvv details:");
+                    this.nCur = State.CARDCONFIRM;
+                    break;
+                case State.CARDCONFIRM:
+                    this.CVV = sInMessage;
+
+                    aMessages.Add("Please confirm the card details  and type \"proceed\":");
+                    aMessages.Add($"1. Card Details : {this.CardDetails} ");
+                    aMessages.Add($"2. CVV : {this.CVV}");
+                    
                     this.nCur = State.ORDERCONFIRM;
                     break;
                 case State.ORDERCONFIRM:

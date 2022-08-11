@@ -88,6 +88,39 @@ namespace OrderBot.tests
             Assert.True(sOutput.Contains(sInput));
         }
 
+        [Fact]
+        public void TestCardDetails()
+        {
+            Session oSession = new Session("12345");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
+            oSession.OnMessage("large");
+            oSession.OnMessage("10");
+            oSession.OnMessage("aravind");
+            oSession.OnMessage("8989898989");
+
+            String sInputCard = oSession.OnMessage("4512345678123456")[0];
+         
+            String sOutput = $"1. Card Details : {sInputCard}";
+            Assert.True(sOutput.Contains(sInputCard));
+        }
       
+        [Fact]
+        public void TestCardDetailsCVV()
+        {
+            Session oSession = new Session("12345");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
+            oSession.OnMessage("large");
+            oSession.OnMessage("10");
+            oSession.OnMessage("aravind");
+            oSession.OnMessage("8989898989");
+            oSession.OnMessage("4512345678123456");
+
+            String sInputCardCVV = oSession.OnMessage("123")[0];
+         
+            String sOutput = $"1. CVV : {sInputCardCVV}";
+            Assert.True(sOutput.Contains(sInputCardCVV));
+        }
     }
 }
