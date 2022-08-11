@@ -16,43 +16,78 @@ namespace OrderBot.tests
         public void TestWelcome()
         {
             Session oSession = new Session("12345");
-            String sInput = oSession.OnMessage("hello")[0];
-            Assert.True(sInput.Contains("Welcome"));
+            String sInput = oSession.OnMessage("Hello!")[0];
+            Assert.True(sInput.Contains("QuickBox"));
         }
+        
         [Fact]
-        public void TestShawarama()
+        public void TestMeatType()
         {
             Session oSession = new Session("12345");
-            String sInput = oSession.OnMessage("hello")[0];
-            Assert.True(sInput.ToLower().Contains("shawarama"));
+            oSession.OnMessage("Hello!");
+
+            String sInput = oSession.OnMessage("chicken")[0];
+            String sOutput =  $"What size of {sInput} do you want?";
+            Assert.True(sOutput.Contains(sInput));
         }
+    
         [Fact]
         public void TestSize()
         {
             Session oSession = new Session("12345");
-            String sInput = oSession.OnMessage("hello")[1];
-            Assert.True(sInput.ToLower().Contains("size"));
-        }
-        [Fact]
-        public void TestLarge()
-        {
-            Session oSession = new Session("12345");
-            oSession.OnMessage("hello");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
+
             String sInput = oSession.OnMessage("large")[0];
-            Assert.True(sInput.ToLower().Contains("protein"));
-            Assert.True(sInput.ToLower().Contains("large"));
+            String sOutput =  $"Perfect! You have choosen {sInput} size. How much quanity(in kilograms)  you want ? ";
+            Assert.True(sOutput.Contains(sInput));
         }
-        [Fact]
-        public void TestChicken()
+
+          [Fact]
+        public void TestQuantity()
         {
-            string sPath = DB.GetConnectionString();
             Session oSession = new Session("12345");
-            oSession.OnMessage("hello");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
             oSession.OnMessage("large");
-            String sInput = oSession.OnMessage("chicken")[0];
-            Assert.True(sInput.ToLower().Contains("toppings"));
-            Assert.True(sInput.ToLower().Contains("large"));
-            Assert.True(sInput.ToLower().Contains("chicken"));
+
+            String sInput = oSession.OnMessage("10")[0];
+                               
+            String sOutput =  $"Quantity choosen is {sInput} \n Whats your name?";
+            Assert.True(sOutput.Contains(sInput));
         }
+        
+        [Fact]
+        public void TestName()
+        {
+            Session oSession = new Session("12345");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
+            oSession.OnMessage("large");
+            oSession.OnMessage("10");
+
+            String sInput = oSession.OnMessage("aravind")[0];
+                               
+            String sOutput =  $"Thank you {sInput}. What's your contact number?";
+            Assert.True(sOutput.Contains(sInput));
+        }
+
+         [Fact]
+        public void TestPhone()
+        {
+            Session oSession = new Session("12345");
+            oSession.OnMessage("Hello!");
+            oSession.OnMessage("chicken");
+            oSession.OnMessage("large");
+            oSession.OnMessage("10");
+            oSession.OnMessage("aravind");
+
+            String sInput = oSession.OnMessage("8989898989")[0];
+                              
+            String sOutput = $"Phone Number : {sInput}";
+            Assert.True(sOutput.Contains(sInput));
+        }
+
+      
     }
 }
