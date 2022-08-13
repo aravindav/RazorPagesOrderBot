@@ -36,7 +36,7 @@ namespace OrderBot
                 case State.MEAT_TYPE:
                     this.oOrder.MeatType = sInMessage;
                     this.oOrder.Save();
-                    aMessages.Add("What size of  " + this.oOrder.MeatType + " do you want?");
+                    aMessages.Add("What size of  " + this.oOrder.MeatType + " do you want? \nSmall\nMedium\nLarge");
                     this.nCur = State.MEAT_SIZE;
                     break;
                 case State.MEAT_SIZE:
